@@ -12,8 +12,8 @@ const multer  = require('multer')
 const stripe=require('stripe')(process.env.STRIPE_KEY)
 const upload = multer({ dest: './userFiles' })
 
-//make user a customer on sign up
-//stop the server from crashing on each error
+app.use(express.json())
+main()
 
 function usernameExists(username,array) {
   return array.some(user => user.username === username);
@@ -22,29 +22,14 @@ function emailExists(username,array) {
   return array.some(user => user.email === username);
 }
 
-app.use(express.json())
-main()
+//make user a customer on sign up
+//make a subscription product
+//  implement timings with firebase and google calender
 
-app.get('/protected', authenticateToken, (req, res) => {
-  try{
-    res.json({ message: 'Welcome to the protected route!'});
-  }catch(e){
-    console.log(e)
-  }
-});
+//the issue with customer initialisation on signup is that I'll have to change how the buying works
 
 app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)=>{
   try{
-    const {userID}=req.user
-    const currentUser=await User.findById(userID)
-    if(currentUser.customerId==''){
-      const customer=await stripe.customers.create({
-        email:currentUser.email
-      })
-      await User.findOneAndUpdate({_id:currentUser._id},{$set:{customerId:customer.id}})
-    }else{
-      const customer=await stripe.customers.retrieve(currentUser.customerId)
-    }
     const session = await stripe.checkout.sessions.create({
       success_url: 'https://localhost:3000/success',
       cancel_url: 'https://localhost:3000/cancel',
@@ -57,6 +42,44 @@ app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)
     console.log(e)
   }
 })
+
+app.post('/signup',async (req,res)=>{
+  try{
+
+    const users=await User.find()
+    if(usernameExists(req.body.username,users)||emailExists(req.body.email,users)) return res.send('user exists')
+
+    let {email,username,password}=req.body
+    const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
+    sendVerificationEmail(req.body.email,randomCode)
+    const customer=await stripe.customers.create({
+      email:currentUser.email
+    })
+    bcrypt.hash(password,10, function(err, hash) {
+      User.create({
+        "email":email,
+        "username":username,
+        "password":hash,
+        "verified":false,
+        "verificationCode":randomCode,
+        "customerId":customer.id
+      })
+    });
+
+    res.send("Verification Email sent!")
+  }catch(err){
+    console.log(err)
+  }
+})
+
+app.get('/protected', authenticateToken, (req, res) => {
+  try{
+    res.json({ message: 'Welcome to the protected route!'});
+  }catch(e){
+    console.log(e)
+  }
+});
+
 
 app.get('/success',(req,res)=>{
   res.json({message:"order success"})
@@ -106,32 +129,6 @@ app.get('/login',async (req,res)=>{
 
 app.post('/files/send',authenticateToken,authenticateUserEmail,authenticateCustomer,upload.single('file'),async (req,res)=>{
   res.status(200).send('yay')
-})
-
-app.post('/signup',async (req,res)=>{
-  try{
-
-    const users=await User.find()
-    if(usernameExists(req.body.username,users)||emailExists(req.body.email,users)) return res.send('user exists')
-
-    let {email,username,password}=req.body
-    const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
-    sendVerificationEmail(req.body.email,randomCode)
-    bcrypt.hash(password,10, function(err, hash) {
-      User.create({
-        "email":email,
-        "username":username,
-        "password":hash,
-        "verified":false,
-        "verificationCode":randomCode,
-        "customerId":''
-      })
-    });
-
-    res.send("Verification Email sent!")
-  }catch(err){
-    console.log(err)
-  }
 })
 
 app.get('/', async (req, res) => {
