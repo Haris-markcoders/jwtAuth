@@ -22,7 +22,6 @@ function emailExists(username,array) {
   return array.some(user => user.email === username);
 }
 
-//make user a customer on sign up
 //make a subscription product
 //  implement timings with firebase and google calender
 
@@ -30,11 +29,13 @@ function emailExists(username,array) {
 
 app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)=>{
   try{
+
+
     const session = await stripe.checkout.sessions.create({
       success_url: 'https://localhost:3000/success',
       cancel_url: 'https://localhost:3000/cancel',
       line_items:req.body.items,
-      mode: 'payment',
+      mode: 'setup',
       payment_method_types: ['card'],
     });
     res.send(session.url)
@@ -53,7 +54,7 @@ app.post('/signup',async (req,res)=>{
     const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
     sendVerificationEmail(req.body.email,randomCode)
     const customer=await stripe.customers.create({
-      email:currentUser.email
+      email:email
     })
     bcrypt.hash(password,10, function(err, hash) {
       User.create({
@@ -82,7 +83,7 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 
 app.get('/success',(req,res)=>{
-  res.json({message:"order success"})
+  res.json({"message":"order success"})
 })
 
 app.get('/cancel',(req,res)=>{
