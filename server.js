@@ -35,7 +35,7 @@ app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)
       success_url: 'https://localhost:3000/success',
       cancel_url: 'https://localhost:3000/cancel',
       line_items:req.body.items,
-      mode: 'setup',
+      mode: 'payment',
       payment_method_types: ['card'],
     });
     res.send(session.url)
