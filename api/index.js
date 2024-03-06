@@ -74,13 +74,13 @@ app.use(express.json())
 //   }
 // })
 
-// app.get('protected', authenticateToken, (req, res) => {
-//   try{
-//     res.json({ message: 'Welcome to the protected route!'});
-//   }catch(e){
-//     console.log(e)
-//   }
-// });
+app.get('protected', authenticateToken, (req, res) => {
+  try{
+    res.json({ message: 'Welcome to the protected route!'});
+  }catch(e){
+    console.log(e)
+  }
+});
 
 
 // app.get('success',(req,res)=>{
