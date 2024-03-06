@@ -5,7 +5,7 @@ const port = 3000
 // const bodyParser= require('body-parser')
 // const {main}=require('./config/db')
 // const {User}=require('./models/User')
-// const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateCustomer}=require('./jwt')
+const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateCustomer}=require('./jwt')
 // const {sendVerificationEmail}=require('./mailer')
 // const bcrypt = require('bcryptjs');
 // const multer  = require('multer')
@@ -28,7 +28,7 @@ app.use(express.json())
 
 // //the issue with customer initialisation on signup is that I'll have to change how the buying works
 
-// app.post('order/create',authenticateToken,authenticateUserEmail,async (req,res)=>{
+// app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)=>{
 //   try{
 
 
@@ -45,7 +45,7 @@ app.use(express.json())
 //   }
 // })
 
-// app.post('signup',async (req,res)=>{
+// app.post('/signup',async (req,res)=>{
 //   try{
 
 //     const users=await User.find()
@@ -74,7 +74,7 @@ app.use(express.json())
 //   }
 // })
 
-app.get('protected', authenticateToken, (req, res) => {
+app.get('/protected', authenticateToken, (req, res) => {
   try{
     res.json({ message: 'Welcome to the protected route!'});
   }catch(e){
@@ -83,17 +83,17 @@ app.get('protected', authenticateToken, (req, res) => {
 });
 
 
-// app.get('success',(req,res)=>{
+// app.get('/success',(req,res)=>{
 //   res.json({"message":"order success"})
 // })
 
-// app.get('cancel',(req,res)=>{
+// app.get('/cancel',(req,res)=>{
 //   res.json({message:"order cancel"})
 // })
 
 
 
-// app.post('verify',async (req,res)=>{
+// app.post('/verify',async (req,res)=>{
 //   try{
 //     const {username,password,code}=req.body
 //     const currentUser = await User.findOne({ username: username});
@@ -113,7 +113,7 @@ app.get('protected', authenticateToken, (req, res) => {
 //   }
 // })
 
-// app.post('login',async (req,res)=>{
+// app.post('/login',async (req,res)=>{
 //   try{
 //     const { username, password } = req.body;
 //     let verified
@@ -129,7 +129,7 @@ app.get('protected', authenticateToken, (req, res) => {
 //   }
 // })
 
-// app.post('files/send',authenticateToken,authenticateUserEmail,authenticateCustomer,upload.single('file'),async (req,res)=>{
+// app.post('/files/send',authenticateToken,authenticateUserEmail,authenticateCustomer,upload.single('file'),async (req,res)=>{
 //   res.status(200).send('yay')
 // })
 
