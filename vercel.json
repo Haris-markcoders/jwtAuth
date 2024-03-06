@@ -1,8 +1,5 @@
 {
-    "functions": {
-      "api": {
-        "handler": "server.js"
-      }
-    }
-  }
-  
+    "rewrites": [
+      { "source": "/api/(.*)", "destination": "/api/$1" }
+    ]
+   }
