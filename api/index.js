@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 // const bodyParser= require('body-parser')
-// const {main}=require('./config/db')
+const {main}=require('./config/db')
 // const {User}=require('./models/User')
 const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateCustomer}=require('./jwt')
 // const {sendVerificationEmail}=require('./mailer')
@@ -14,7 +14,7 @@ const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateC
 // console.log('running server.js')
 
 app.use(express.json())
-// main()
+main()
 
 // function usernameExists(username,array) {
 //   return array.some(user => user.username === username);
