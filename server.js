@@ -27,7 +27,7 @@ function emailExists(username,array) {
 
 //the issue with customer initialisation on signup is that I'll have to change how the buying works
 
-app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)=>{
+app.post('api/order/create',authenticateToken,authenticateUserEmail,async (req,res)=>{
   try{
 
 
@@ -44,7 +44,7 @@ app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)
   }
 })
 
-app.post('/signup',async (req,res)=>{
+app.post('api/signup',async (req,res)=>{
   try{
 
     const users=await User.find()
@@ -73,7 +73,7 @@ app.post('/signup',async (req,res)=>{
   }
 })
 
-app.get('/protected', authenticateToken, (req, res) => {
+app.get('api/protected', authenticateToken, (req, res) => {
   try{
     res.json({ message: 'Welcome to the protected route!'});
   }catch(e){
@@ -82,17 +82,17 @@ app.get('/protected', authenticateToken, (req, res) => {
 });
 
 
-app.get('/success',(req,res)=>{
+app.get('api/success',(req,res)=>{
   res.json({"message":"order success"})
 })
 
-app.get('/cancel',(req,res)=>{
+app.get('api/cancel',(req,res)=>{
   res.json({message:"order cancel"})
 })
 
 
 
-app.post('/verify',async (req,res)=>{
+app.post('api/verify',async (req,res)=>{
   try{
     const {username,password,code}=req.body
     const currentUser = await User.findOne({ username: username});
@@ -112,7 +112,7 @@ app.post('/verify',async (req,res)=>{
   }
 })
 
-app.get('/login',async (req,res)=>{
+app.post('api/login',async (req,res)=>{
   try{
     const { username, password } = req.body;
     let verified
@@ -128,14 +128,14 @@ app.get('/login',async (req,res)=>{
   }
 })
 
-app.post('/files/send',authenticateToken,authenticateUserEmail,authenticateCustomer,upload.single('file'),async (req,res)=>{
+app.post('api/files/send',authenticateToken,authenticateUserEmail,authenticateCustomer,upload.single('file'),async (req,res)=>{
   res.status(200).send('yay')
 })
 
-app.get('/', async (req, res) => {
+app.get('/api/', async (req, res) => {
   res.send('Hello World!')
 })
 
-app.listen(port, () => {
+app.listen(process.env.port||port, () => {
   console.log(`Example app listening on port ${port}`)
 })
