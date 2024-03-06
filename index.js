@@ -8,9 +8,9 @@ const {User}=require('./models/User')
 const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateCustomer}=require('./api/jwt')
 // const {sendVerificationEmail}=require('./mailer')
 const bcrypt = require('bcryptjs');
-const multer  = require('multer')
+// const multer  = require('multer')
 const stripe=require('stripe')(process.env.STRIPE_KEY)
-const upload = multer({ dest: './userFiles' })
+// const upload = multer({ dest: './userFiles' })
 console.log('running server.js')
 
 app.use(express.json())
@@ -129,9 +129,9 @@ app.post('/login',async (req,res)=>{
   }
 })
 
-app.post('/files/send',authenticateToken,authenticateUserEmail,authenticateCustomer,upload.single('file'),async (req,res)=>{
-  res.status(200).send('yay')
-})
+// app.post('/files/send',authenticateToken,authenticateUserEmail,authenticateCustomer,upload.single('file'),async (req,res)=>{
+//   res.status(200).send('yay')
+// })
 
 app.get('/', async (req, res) => {
   res.send('Hello World!')
