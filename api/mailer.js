@@ -1,7 +1,6 @@
+import { createTransport } from 'nodemailer';
 
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   service: 'gmail',
   auth: {
     user: 'haris.markcoders@gmail.com',
@@ -10,23 +9,27 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendVerificationEmail = async (userEmail, code) => {
-  try{
-    const mailOptions = {
-      from: 'haris.markcoders@gmail.com',
-      to: userEmail,
-      subject: 'Email Verification',
-      text: `Please verify your email by entering the following code at http://localhost:3000/verify ${code}`
-    };
-  
-    try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log('Email sent: ' + info.response);
-    } catch (error) {
-      console.log('Error sending email: ' + error);
+  await new Promise(async (resolve, reject) => {
+    try{
+      const mailOptions = {
+        from: 'haris.markcoders@gmail.com',
+        to: userEmail,
+        subject: 'Email Verification',
+        text: `Please verify your email by entering the following code at http://localhost:3000/verify ${code}`
+      };
+    
+      try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent: ' + info.response);
+        resolve('Email sent: ' + info.response)
+      } catch (error) {
+        console.log('Error sending email: ' + error);
+        reject(error)
+      }
+    }catch(e){
+      console.log(e)
     }
-  }catch(e){
-    console.log(e)
-  }
+  })
 };
 
-module.exports = {sendVerificationEmail}
+export default {sendVerificationEmail}
