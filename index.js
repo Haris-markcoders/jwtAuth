@@ -6,7 +6,7 @@ const bodyParser= require('body-parser')
 const {main}=require('./config/db')
 const {User}=require('./models/User')
 const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateCustomer}=require('./api/jwt')
-const {sendVerificationEmail}=require('./mailer')
+// const {sendVerificationEmail}=require('./mailer')
 const bcrypt = require('bcryptjs');
 const multer  = require('multer')
 const stripe=require('stripe')(process.env.STRIPE_KEY)
@@ -53,7 +53,7 @@ app.post('/signup',async (req,res)=>{
 
     let {email,username,password}=req.body
     const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
-    sendVerificationEmail(req.body.email,randomCode)
+    // sendVerificationEmail(req.body.email,randomCode)
     const customer=await stripe.customers.create({
       email:email
     })
