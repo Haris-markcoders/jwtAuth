@@ -1,7 +1,7 @@
 const dotenv=require('dotenv').config()
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3000 
 // const bodyParser= require('body-parser')
 const {main}=require('./config/db')
 // const {User}=require('./models/User')
