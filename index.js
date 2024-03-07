@@ -52,6 +52,7 @@ app.post('/signup',async (req,res)=>{
     if(usernameExists(req.body.username,users)||emailExists(req.body.email,users)) return res.send('user exists')
 
     let {email,username,password}=req.body
+    console.log(req.body)
     const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
     await sendVerificationEmail(req.body.email,randomCode)
     // const customer=await stripe.customers.create({
