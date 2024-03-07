@@ -47,7 +47,7 @@ app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)
 
 app.post('/signup',async (req,res)=>{
   try{
-
+    main()
     const users=await User.find()
     if(usernameExists(req.body.username,users)||emailExists(req.body.email,users)) return res.send('user exists')
 
