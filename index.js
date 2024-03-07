@@ -55,7 +55,7 @@ app.post('/signup',async (req,res)=>{
     const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
     sendVerificationEmail(req.body.email,randomCode)
     const customer=await stripe.customers.create({
-      email:email
+      email:req.body.email
     })
     bcrypt.hash(password,10, function(err, hash) {
       console.log('creating user')
