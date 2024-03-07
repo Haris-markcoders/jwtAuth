@@ -16,13 +16,6 @@ console.log('running server.js')
 app.use(express.json())
 main()
 
-function usernameExists(username,array) {
-  return array.some(user => user.username === username);
-}
-function emailExists(username,array) {
-  return array.some(user => user.email === username);
-}
-
 //make a subscription product
 //  implement timings with firebase and google calender
 
@@ -49,6 +42,13 @@ app.post('/signup',async (req,res)=>{
   try{
     main()
     const users=await User.find()
+    function usernameExists(username,array) {
+      return array.some(user => user.username === username);
+    }
+    function emailExists(username,array) {
+      return array.some(user => user.email === username);
+    }
+    
     if(usernameExists(req.body.username,users)||emailExists(req.body.email,users)) return res.send('user exists')
 
     let {email,username,password}=req.body
