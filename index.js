@@ -39,7 +39,7 @@ app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)
 })
 
 app.post('/signup',async (req,res)=>{
-  await main()
+  // await main()
   try{
     const users=await User.find()
     function usernameExists(username,array) {
