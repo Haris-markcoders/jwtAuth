@@ -9,7 +9,7 @@ const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateC
 const {sendVerificationEmail}=require('./api/mailer')
 const bcrypt = require('bcryptjs');
 // const multer  = require('multer')
-const stripe=require('stripe')(process.env.STRIPE_KEY)
+// const stripe=require('stripe')(process.env.STRIPE_KEY)
 // const upload = multer({ dest: './userFiles' })
 console.log('running server.js')
 
@@ -40,7 +40,6 @@ app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)
 
 app.post('/signup',async (req,res)=>{
   try{
-    await main()
     const users=await User.find()
     function usernameExists(username,array) {
       return array.some(user => user.username === username);
