@@ -9,7 +9,7 @@ const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateC
 const {sendVerificationEmail}=require('./api/mailer')
 const bcrypt = require('bcryptjs');
 // const multer  = require('multer')
-// const stripe=require('stripe')(process.env.STRIPE_KEY)
+const stripe=require('stripe')(process.env.STRIPE_KEY)
 // const upload = multer({ dest: './userFiles' })
 console.log('running server.js')
 
@@ -49,15 +49,13 @@ app.post('/signup',async (req,res)=>{
       return array.some(user => user.email === username);
     }
     
-    if(usernameExists(req.body.username,users)||emailExists(req.body.email,users)) return res.send('user exists')
-
-    let {email,username,password}=req.body
-    console.log(req.body)
+    const {email,username,password}=req.body
+    if(usernameExists(username,users)||emailExists(email,users)) return res.send('user exists')
     const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
-    await sendVerificationEmail(req.body.email,randomCode)
-    // const customer=await stripe.customers.create({
-    //   email:email
-    // })
+    await sendVerificationEmail(email,randomCode)
+    const customer=await stripe.customers.create({
+      email:email
+    })
     bcrypt.hash(password,10, function(err, hash) {
       console.log('creating user')
       User.create({
