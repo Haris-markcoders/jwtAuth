@@ -38,41 +38,41 @@ app.post('/order/create',authenticateToken,authenticateUserEmail,async (req,res)
   }
 })
 
-app.post('/signup',async (req,res)=>{
-  // await main()
-  try{
-    const users=await User.find()
-    function usernameExists(username,array) {
-      return array.some(user => user.username === username);
-    }
-    function emailExists(username,array) {
-      return array.some(user => user.email === username);
-    }
-    
-    const {email,username,password}=req.body
-    if(usernameExists(username,users)||emailExists(email,users)) return res.send('user exists')
-    const randomCode=Math.floor(Math.random() * (999999 - 100000) + 100000)
-    await sendVerificationEmail(email,randomCode)
-    const customer=await stripe.customers.create({
-      email:email
-    })
-    bcrypt.hash(password,10, function(err, hash) {
-      console.log('creating user')
-      User.create({
-        "email":email,
-        "username":username,
-        "password":hash,
-        "verified":false,
-        "verificationCode":randomCode,
-        "customerId":customer.id
-      })
-    });
+app.post('/signup', async (req, res) => {
+  try {
+    const users = await User.find();
 
-    res.send("Verification Email sent!")
-  }catch(err){
-    console.log(err)
+    function usernameExists(username, array) {
+      return array.some((user) => user.username === username);
+    }
+    function emailExists(email, array) {
+      return array.some((user) => user.email === email);
+    }
+    const { email, username, password } = req.body;
+    if (usernameExists(username, users) || emailExists(email, users)) {
+      return res.send('User already exists');
+    }
+    const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000);
+    await sendVerificationEmail(email, randomCode);
+    const customer = await stripe.customers.create({
+      email: email,
+    });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('Creating user');
+    await User.create({
+      email: email,
+      username: username,
+      password: hashedPassword,
+      verified: false,
+      verificationCode: randomCode,
+      customerId: customer.id,
+    });
+    res.send('Verification Email sent!');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
   }
-})
+});
 
 app.get('/protected', authenticateToken, (req, res) => {
   try{
