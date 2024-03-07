@@ -58,6 +58,7 @@ app.post('/signup',async (req,res)=>{
       email:email
     })
     bcrypt.hash(password,10, function(err, hash) {
+      console.log('creating user')
       User.create({
         "email":email,
         "username":username,
