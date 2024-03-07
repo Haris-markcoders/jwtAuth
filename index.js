@@ -6,14 +6,14 @@ const bodyParser= require('body-parser')
 const {main}=require('./config/db')
 const {User}=require('./models/User')
 const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateCustomer}=require('./api/jwt')
-const {sendVerificationEmail}=require('./mailer')
+const {sendVerificationEmail}=require('./api/mailer')
 const bcrypt = require('bcryptjs');
 // const multer  = require('multer')
 const stripe=require('stripe')(process.env.STRIPE_KEY)
 // const upload = multer({ dest: './userFiles' })
 console.log('running server.js')
 
-app.use(express.json())   
+app.use(express.json())
 main()
 
 function usernameExists(username,array) {
