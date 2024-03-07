@@ -8,7 +8,7 @@ const transporter = createTransport({
   }
 });
 
-const sendVerificationEmail = async (userEmail, code) => {
+export const sendVerificationEmail = async (userEmail, code) => {
   await new Promise(async (resolve, reject) => {
     try{
       const mailOptions = {
@@ -31,5 +31,3 @@ const sendVerificationEmail = async (userEmail, code) => {
     }
   })
 };
-
-export default {sendVerificationEmail}
