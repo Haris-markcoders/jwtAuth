@@ -29,7 +29,4 @@ const UserSchema=new Schema({
         default:''
     }
 },{ database:"jwtauth" })
-const User= model('User', UserSchema);
-
-
-export default{User}
+export const User= model('User', UserSchema);
