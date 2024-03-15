@@ -4,7 +4,8 @@ const app = express()
 const port = 3000 
 const bodyParser= require('body-parser')
 const {main}=require('./config/db')
-const {User}=require('./api/User').default
+const {User}=require('./api/User')
+const {Order}=require("./api/Order")
 const {generateAccessToken,authenticateToken,authenticateUserEmail,authenticateCustomer}=require('./api/jwt')
 const {sendVerificationEmail}=require('./api/mailer')
 const bcrypt = require('bcryptjs');
@@ -15,6 +16,15 @@ console.log('running server.js')
 
 app.use(express.json())
 main()
+
+app.post('/api/orders/create',(req,res)=>{
+    Order.create({
+        store_id: req.body.app_id,
+        po: req.body.name,
+        order_detail: req.body
+    })
+    res.json(req.body)
+})
 
 //make a subscription product
 //  implement timings with firebase and google calender
