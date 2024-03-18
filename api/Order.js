@@ -16,6 +16,10 @@ const OrderSchema=new mongoose.Schema({
     date: {
       type: Date,
       default: Date.now,
+    },
+    fulfilled:{
+        type:Boolean,
+        default:false
     }
 },{ database:"jwtauth" })
 const Order= mongoose.model('Order', OrderSchema);
