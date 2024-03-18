@@ -17,12 +17,13 @@ console.log('running server.js')
 app.use(express.json())
 main()
 
-app.post('/api/orders/create',(req,res)=>{
-    Order.insertOne({
+app.post('/api/orders/create', async (req,res)=>{
+    const order = new Order({
         store_id: req.body.app_id,
         po: req.body.name,
         order_detail: req.body
     })
+    await order.save()
     res.json(req.body)
 })
 
