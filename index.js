@@ -18,7 +18,7 @@ app.use(express.json())
 main()
 
 app.post('/api/orders/create',(req,res)=>{
-    Order.create({
+    Order.insertOne({
         store_id: req.body.app_id,
         po: req.body.name,
         order_detail: req.body
